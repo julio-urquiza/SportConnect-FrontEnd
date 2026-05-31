@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js";
 
 const schema = yup.object({
   correo: yup
@@ -15,11 +16,16 @@ const schema = yup.object({
 }).required()
 
 function FormLogin() {
+  const {loginReq, loading, error} = useAuth()
+  const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   })
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = async (data) => {
+    const retorno = await loginReq(data.correo, data.contrasenia)
+    if (retorno) navigate('/')
+  }
 
   return (
     <form
@@ -37,7 +43,7 @@ function FormLogin() {
         </label>
 
         <input
-          type="email"
+          type="email"  
           {...register("correo")}
           placeholder="ejemplo@email.com"
           className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -71,8 +77,12 @@ function FormLogin() {
         type="submit"
         className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition"
       >
-        Ingresar
+        {loading ? "Ingresando..." : "Ingresar"}
       </button>
+
+      {error
+        ?<p className="text-center text-red-500 mt-4"> El correo o contraseña no es válido</p>
+        :null}
 
       <p className="text-center text-gray-600 mt-4">
         ¿No tenés cuenta?{" "}

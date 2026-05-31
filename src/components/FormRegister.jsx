@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js"
 
 const schema = yup.object({
   correo: yup
@@ -24,16 +25,19 @@ const schema = yup.object({
 });
 
 function FormRegister() {
+  const { registerReq, loading, error } = useAuth()
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-  });
+  })
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const retorno = await registerReq(data.correo, data.contrasenia, 'user')
+    if (retorno) navigate('/')
   };
 
   return (
@@ -104,8 +108,12 @@ function FormRegister() {
         type="submit"
         className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition"
       >
-        Registrarse
+        {loading ? "Registrando..." : "Registrarse"}
       </button>
+
+      {error
+        ?<p className="text-center text-red-500 mt-4"> El correo electrónico no es valido</p>
+        :null}  
 
       <p className="text-center text-gray-600 mt-4">
         ¿Ya tenés cuenta?{" "}
@@ -113,7 +121,7 @@ function FormRegister() {
           to="/login"
           className="text-green-500 hover:underline"
         >
-          Iniciá sesión
+          Iniciar sesión
         </Link>
       </p>
     </form>

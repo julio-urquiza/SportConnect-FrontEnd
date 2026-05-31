@@ -1,10 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
+  const location = useLocation()
+  const linkMap = {
+    '/login': { to: '/register', label: 'Register' },
+    '/register': { to: '/login', label: 'Login' },
+  }
+  const currentLink = linkMap[location.pathname] || { to: '/login', label: 'Login' };
+
   return (
     <nav className="bg-gray-900 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        
+
         {/* Logo */}
         <Link
           to="/"
@@ -21,19 +28,11 @@ function Navbar() {
           >
             Home
           </Link>
-
           <Link
-            to="/login"
-            className="hover:text-green-400 transition"
-          >
-            Login
-          </Link>
-
-          <Link
-            to="/register"
+            to={currentLink.to}
             className="bg-green-500 px-4 py-2 rounded-lg hover:bg-green-600 transition"
           >
-            Register
+            {currentLink.label}
           </Link>
         </div>
       </div>

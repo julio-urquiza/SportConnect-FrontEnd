@@ -22,10 +22,10 @@ const request = async (endpoint, { method = "POST", body, token } = {}) => {
 }
 
 export const loginRequest = (body) =>
-  request("/api/users/login", { body })
+  request("/api/user/login", { body })
 
 export const registerRequest = (body) =>
-  request("/api/users/register", { body })
+  request("/api/user/register", { body })
 
 export const meRequest = (token) =>
-  request("/api/users/me", {method: "GET", token})
+  request("/api/user/me", {method: "GET", token})

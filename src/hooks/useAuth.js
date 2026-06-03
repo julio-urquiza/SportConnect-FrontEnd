@@ -10,7 +10,7 @@ export function useAuth() {
     setError(null)
     try {
       const data = await loginRequest({email, password})
-      // localStorage.setItem("token", data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
       return data.user
     } catch (err) {
       setError(err.message)
@@ -25,7 +25,7 @@ export function useAuth() {
     setError(null)
     try {
       const data = await registerRequest({email, password, role})
-      // localStorage.setItem("token", data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
       return data.user
     } catch (err) {
       setError(err.message)

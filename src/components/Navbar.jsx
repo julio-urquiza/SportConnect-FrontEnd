@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import ProfileDropdown from "./ProfileDropDown.jsx";
 
 function Navbar() {
   const location = useLocation()
@@ -28,12 +29,19 @@ function Navbar() {
           >
             Home
           </Link>
-          <Link
-            to={currentLink.to}
-            className="bg-green-500 px-4 py-2 rounded-lg hover:bg-green-600 transition"
-          >
-            {currentLink.label}
-          </Link>
+          {
+            localStorage.getItem("user")
+              ? 
+              <ProfileDropdown />
+              : 
+              <Link
+                to={currentLink.to}
+                className="bg-green-500 px-4 py-2 rounded-lg hover:bg-green-600 transition"
+              >
+                {currentLink.label}
+              </Link>
+          }
+
         </div>
       </div>
     </nav>

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js";
 
 const data = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
 
@@ -31,6 +32,7 @@ const menuItems = [
 export default function ProfileDropdown() {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
+    const { logout, error } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -144,7 +146,7 @@ export default function ProfileDropdown() {
                         <button
                             role="menuitem"
                             onClick={() => {
-                                localStorage.removeItem("user");
+                                logout();
                                 setOpen(false);
                                 navigate("/");
                             }}

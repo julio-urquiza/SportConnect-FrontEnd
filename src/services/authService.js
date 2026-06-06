@@ -1,14 +1,11 @@
-const request = async (endpoint, { method = "POST", body, token } = {}) => {
+const request = async (endpoint, { method = "POST", body ,credentials=undefined } = {}) => {
   const headers = {
     "Content-Type": "application/json",
   }
 
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
   const res = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
     method,
+    credentials : "include",
     headers,
     body: body ? JSON.stringify(body) : undefined,
   })
@@ -27,5 +24,8 @@ export const loginRequest = (body) =>
 export const registerRequest = (body) =>
   request("/api/user/register", { body })
 
-export const meRequest = (token) =>
-  request("/api/user/me", {method: "GET", token})
+export const meRequest = () =>
+  request("/api/user/me", {method: "GET", credentials:"include"})
+
+export const logoutRequest = () =>
+  request("/api/user/logout", {method: "POST"})

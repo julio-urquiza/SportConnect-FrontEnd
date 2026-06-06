@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { loginRequest, registerRequest } from '../services/authService.js'
+import { loginRequest, registerRequest, logoutRequest } from '../services/authService.js'
 
 export function useAuth() {
   const [loading, setLoading] = useState(false)
@@ -35,5 +35,15 @@ export function useAuth() {
     }
   }
 
-  return { loginReq, registerReq, loading, error }
+  async function logout() {
+    try{
+      const data = await logoutRequest()
+      if(!data) throw new Error("Error al cerrar sesión")
+      localStorage.removeItem("user")
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  return { logout, loginReq, registerReq, loading, error }
 }

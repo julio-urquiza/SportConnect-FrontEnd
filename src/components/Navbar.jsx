@@ -1,8 +1,11 @@
-import { Link, useLocation } from "react-router-dom";
-import ProfileDropdown from "./ProfileDropDown.jsx";
+import { Link, useLocation } from "react-router-dom"
+import { useContext } from "react"
+import { AuthContext } from "../context/AuthContext.jsx"
+import ProfileDropdown from "./ProfileDropDown.jsx"
 
 function Navbar() {
   const location = useLocation()
+  const { user } = useContext(AuthContext)
   const linkMap = {
     '/login': { to: '/register', label: 'Register' },
     '/register': { to: '/login', label: 'Login' },
@@ -30,7 +33,7 @@ function Navbar() {
             Home
           </Link>
           {
-            localStorage.getItem("user")
+            user
               ? 
               <ProfileDropdown />
               : 

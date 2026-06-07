@@ -1,8 +1,9 @@
+import { useContext } from "react"
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js"
+import { AuthContext } from "../context/AuthContext.jsx"
 
 const schema = yup.object({
   correo: yup
@@ -25,7 +26,7 @@ const schema = yup.object({
 });
 
 function FormRegister() {
-  const { registerReq, loading, error } = useAuth()
+  const { registerRequest, loading, error } = useContext(AuthContext)
   const navigate = useNavigate()
   const {
     register,
@@ -36,7 +37,7 @@ function FormRegister() {
   })
 
   const onSubmit = async (data) => {
-    const retorno = await registerReq(data.correo, data.contrasenia, 'user')
+    const retorno = await registerRequest(data.correo, data.contrasenia, 'user')
     if (retorno) navigate('/')
   };
 

@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
+import { useContext } from "react"
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js";
+import { AuthContext } from "../context/AuthContext.jsx"
 
 const schema = yup.object({
   correo: yup
@@ -16,14 +17,14 @@ const schema = yup.object({
 }).required()
 
 function FormLogin() {
-  const {loginReq, loading, error} = useAuth()
+  const { loginRequest, loading, error } = useContext(AuthContext)
   const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   })
 
   const onSubmit = async (data) => {
-    const retorno = await loginReq(data.correo, data.contrasenia)
+    const retorno = await loginRequest(data.correo, data.contrasenia)
     if (retorno) navigate('/')
   }
 

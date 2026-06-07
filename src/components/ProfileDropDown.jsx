@@ -1,15 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js";
-
-const data = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
-
-const user = {
-    name: data ? data.name : "Usuario",
-    email: data ? data.email : "",
-    avatar: data ? data.avatarURL : null,
-    initials: data ? data.email.slice(0, 2).toUpperCase() : "",
-};
+import { AuthContext } from "../context/AuthContext.jsx"
 
 const menuItems = [
     {
@@ -32,7 +23,7 @@ const menuItems = [
 export default function ProfileDropdown() {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
-    const { logout, error } = useAuth();
+    const { user, logoutRequest } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -73,7 +64,7 @@ export default function ProfileDropdown() {
                         : 
                             (<div className="w-full h-full bg-linear-to-br from-green-700 to-green-400 flex items-center justify-center">
                                 <span className="text-white text-sm font-semibold tracking-wide select-none">
-                                    {user.initials}
+                                    {user.email.slice(0, 2).toUpperCase()}
                                 </span>
                             </div>)
                     }
@@ -146,7 +137,7 @@ export default function ProfileDropdown() {
                         <button
                             role="menuitem"
                             onClick={() => {
-                                logout();
+                                logoutRequest();
                                 setOpen(false);
                                 navigate("/");
                             }}

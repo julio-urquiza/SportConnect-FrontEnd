@@ -12,13 +12,35 @@ import {
   MapPin,
 } from "lucide-react";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function FormLogin() {
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const validateForm = () => {
+    const newErrors = {};
+    const email = formData.email.trim();
+
+    if (!email) {
+      newErrors.email = "El correo electrónico es obligatorio";
+    } else if (!EMAIL_REGEX.test(email)) {
+      newErrors.email = "Ingresá un correo electrónico válido";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "La contraseña es obligatoria";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "La contraseña debe tener al menos 8 caracteres";
+    }
+
+    return newErrors;
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -27,12 +49,27 @@ function FormLogin() {
       ...formData,
       [name]: value,
     });
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log("Datos del login:", formData);
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    console.log({
+      email: formData.email.trim(),
+      password: formData.password,
+    });
 
     // ACA VA LA PARTE QUE NOSE OSEA EL BACKEND
 
@@ -101,7 +138,7 @@ function FormLogin() {
                 Iniciar sesión
               </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} noValidate className="space-y-6">
                 {/* CORREO ELECTRONICO */}
                 <div>
                   <label
@@ -123,9 +160,17 @@ function FormLogin() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="ejemplo@email.com"
+                      required
+                      autoComplete="email"
                       className="w-full rounded-full border border-teal-400/20 bg-[#152042]/80 py-3.5 pl-12 pr-5 text-white placeholder:text-slate-500 outline-none transition-all focus:border-teal-300/60 focus:ring-2 focus:ring-teal-400/20"
                     />
                   </div>
+
+                  {errors.email && (
+                    <p className="mt-2 ml-2 text-sm text-pink-300">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* CONTRASEÑA */}
@@ -149,6 +194,9 @@ function FormLogin() {
                       value={formData.password}
                       onChange={handleChange}
                       placeholder="••••••••"
+                      required
+                      minLength={8}
+                      autoComplete="current-password"
                       className="w-full rounded-full border border-teal-400/20 bg-[#152042]/80 py-3.5 pl-12 pr-12 text-white placeholder:text-slate-500 outline-none transition-all focus:border-teal-300/60 focus:ring-2 focus:ring-teal-400/20"
                     />
 
@@ -165,6 +213,12 @@ function FormLogin() {
                       )}
                     </button>
                   </div>
+
+                  {errors.password && (
+                    <p className="mt-2 ml-2 text-sm text-pink-300">
+                      {errors.password}
+                    </p>
+                  )}
 
                   <div className="mt-2 text-right">
                     <a

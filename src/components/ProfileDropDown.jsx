@@ -89,7 +89,7 @@ export default function ProfileDropdown() {
                     <div className="px-4 py-4 border-b border-zinc-800 flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-linear-to-br from-green-700 to-green-400 flex items-center justify-center shrink-0">
                             <span className="text-white text-sm font-semibold">
-                                {user.initials}
+                                {user.email.slice(0, 2).toUpperCase()}
                             </span>
                         </div>
                         <div className="min-w-0">

@@ -1,12 +1,13 @@
-import SearchBar from "../components/SearchBar.jsx"
-import CourtGrid from "../components/CourtGrid.jsx"
+import SearchBar from "../components/SearchBar.jsx";
+import CourtsList from "../components/CourtsList.jsx";
 
 function Home() {
-    return (
-        <div className="min-h-screen flex-col items-center justify-center bg-gray-100 px-4">
-            <SearchBar />
-            <CourtGrid />
-        </div>
-    )
+  return (
+    <div className="min-h-screen bg-[#00001a] px-4 py-8">
+      <SearchBar />
+      <CourtsList />
+    </div>
+  );
 }
-export default Home
+
+export default Home;
